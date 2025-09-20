@@ -1,0 +1,20 @@
+{% load i18n %}
+{% url 'core:customer_profile' as customer_profile_link %}
+{% url 'core:payment_information' as payment_information_link %}
+{% url 'core:notification' as notification_link %}
+
+<div class="nav flex-column nav-pills me-3" >
+
+    <a onclick="location.href='{{ customer_profile_link }}'" class="nav-link {% if request.path == customer_profile_link %}active{% endif %}" id="v-pills-home-tab"
+       type="button" >{% trans 'Account information' %}
+    </a>
+
+    <a onclick="location.href='{{ payment_information_link }}'" class="nav-link {% if request.path == payment_information_link %}active{% endif %}" id="v-pills-home-tab"
+       type="button" >{% trans 'Payment' %}
+    </a>
+
+    <a onclick="location.href='{{ notification_link }}'" class="nav-link {% if request.path == notification_link %}active{% endif %}" id="v-pills-home-tab"
+       type="button" >{% trans 'Email & Notifications' %}
+    </a>
+
+</div>

@@ -1,0 +1,84 @@
+{% load i18n %}
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'core:home_screen' %}">Sef Luxury Services</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#services">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">Help</a>
+                </li>
+
+                <li class="nav-item dropdown-center" >
+                    {% get_current_language as LANGUAGE_NAME %}
+                    {% get_language_info for LANGUAGE_NAME as lang %}
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        {% if LANGUAGE_NAME == "fr" %}
+                            <i class="fi fi-fr"></i>
+                        {% elif LANGUAGE_NAME == "en" %}
+                            <i class="fi fi-us"></i>
+                        {% elif LANGUAGE_NAME == "es" %}
+                            <i class="fi fi-es"></i>
+                        {% endif %}
+                        {{ lang.name_translated }}
+                    </a>
+                    <ul class="dropdown-menu" >
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_current_language as LANGUAGE_NAME %}
+                        {% for LANGUAGE in LANGUAGES %}
+                            {% if LANGUAGE.0 != LANGUAGE_NAME %}
+                                <li>
+                                    <a class="dropdown-item lang_activation"
+                                       style="cursor: pointer"
+                                       data-activation=" ?next={{ request.path_info }}">
+                                        {% if LANGUAGE.0 == "fr" %}
+                                            <i class="fi fi-fr"></i>
+                                        {% elif LANGUAGE.0 == "en" %}
+                                            <i class="fi fi-us"></i>
+                                        {% elif LANGUAGE.0 == "es" %}
+                                            <i class="fi fi-es"></i>
+                                        {% endif %}
+                                        <span>{{ LANGUAGE.1 }}</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </ul>
+
+                </li>
+
+                {% if request.user.is_authenticated %}
+
+                    <li class="nav-item dropdown-center">
+
+                        <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-regular fa-user"></i> {{ request.user.firstname }}
+                        </a>
+                        <ul class="dropdown-menu">
+
+                            <li><a class="dropdown-item" href="{% url 'core:upcoming_bookings' %}">{% trans "Bookings" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'core:customer_profile' %}">{% trans "My Profile" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'core:user_logout' %}">{% trans "Log Out" %}</a></li>
+
+                        </ul>
+
+                    </li>
+
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:login_screen' %}">Sign In</a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</nav>

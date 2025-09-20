@@ -1,0 +1,828 @@
+{% extends 'homepage/partials/base_layout.html' %}
+{% load static %}
+{% load i18n %}
+{% block css_extend %}
+
+{% endblock %}
+
+{% block content %}
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container ">
+            <div class="row gy-4 align-items-center justify-content-between" style="height: 600px">
+
+                <div class="col-12 col-sm-6 col-lg-7 col-xl-5 text-white">
+                    <div>
+                        <h3 class="fw-bold mb-4 entry-title">
+                            {% trans 'Professional Chauffeur Services for All Your Travel Needs' %}
+                        </h3>
+                        <p class="mb-5 lead">Sit back, relax, and let our expert drivers take you
+                            where you need to go in
+                            style. Whether it’s special events, airport transfers, or hourly transfers, we've got you
+                            covered. Enjoy a seamless ride with our top-notch chauffeur service.</p>
+                    </div>
+
+                    <div class="d-flex flex-row buttons-holder">
+                        <div class="me-2"><img src="{% static 'assets/imgs/appstore.png' %}" alt=""></div>
+                        <div class="ms-2"><img src="{% static 'assets/imgs/google_play.png' %}" alt=""></div>
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-5 col-xl-5">
+
+                    <div>
+                        <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+                                        data-bs-target="#home" type="button" role="tab" aria-controls="home"
+                                        aria-selected="true">{% trans 'One Way' %}
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+                                        data-bs-target="#profile" type="button" role="tab"
+                                        aria-controls="profile" aria-selected="false">{% trans 'By the Hour' %}
+                                </button>
+                            </li>
+
+                        </ul>
+                        <div class="tab-content card card-body" id="myTabContent"
+                             style="border-top: none; border-radius: 0 0 5px 5px ">
+
+                            <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                 aria-labelledby="home-tab">
+                                <div class="pt-3 px-3">
+                                    <form id="wayForm" action="" method="post" autocomplete="off" novalidate>
+
+                                        {# From address container #}
+                                        <div class="position-relative">
+
+                                            <div class="row align-items-center ride-search-container">
+                                                <div class="col-1">
+                                                    <i class="fa-solid fa-location-dot text-light-emphasis"></i>
+                                                </div>
+                                                <div class="col">
+                                                    <label for="way_from_address">{% trans 'From' %}</label>
+                                                    <div>
+                                                        <input autocomplete="off"
+                                                               required
+                                                               placeholder="{% trans 'Address, airport, hotel, ...' %}"
+                                                               id="way_from_address"
+                                                               class="form-control form-control-sm border border-0 bg-light p-0"
+                                                               type="text"
+                                                        >
+                                                    </div>
+                                                </div>
+                                                <div class="col-1">
+                                                    <i class="fa-solid fa-circle-xmark pointer text-light-emphasis d-none"></i>
+                                                </div>
+                                            </div>
+
+                                            <span class="text-danger"
+                                                  style="font-size: smaller;display: none">{% trans 'Address cannot be empty' %}</span>
+
+                                            <div id="way_from_id_suggest" class="position-absolute z-3 w-100" style="top: 104%">
+
+                                            </div>
+                                        </div>
+
+                                        {# To address container #}
+                                        <div class="position-relative">
+
+                                            <div class="row align-items-center ride-search-container mt-3">
+                                                <div class="col-1">
+                                                    <i class="fa-solid fa-location-dot text-light-emphasis"></i>
+                                                </div>
+                                                <div class="col">
+                                                    <label for="way_to_address">{% trans 'To' %}</label>
+                                                    <div>
+                                                        <input autocomplete="off"
+                                                               placeholder="{% trans 'Address, airport, hotel, ...' %}"
+                                                               id="way_to_address"
+                                                               class="form-control form-control-sm border border-0 bg-light p-0 address-picker"
+                                                               type="text"
+                                                        >
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-1">
+                                                    <i class="fa-solid fa-circle-xmark pointer text-light-emphasis d-none"></i>
+                                                </div>
+                                            </div>
+
+                                            <span class="text-danger"
+                                                  style="font-size: smaller;display: none">{% trans 'Address cannot be empty' %}</span>
+
+                                            <div id="way_to_id_suggest" class="position-absolute z-3 w-100" style="top: 104%">
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row mt-3 ">
+                                            <div class="col me-1">
+                                                <div class="row align-items-center ride-search-container ">
+                                                    <div class="col-1">
+                                                        <i class="fa-solid fa-calendar text-light-emphasis"></i>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="date">{% trans 'Date' %}</label>
+                                                        <div>
+                                                            <input type="hidden" name="date">
+                                                            <input autocomplete="off"
+                                                                   id="dated"
+                                                                   readonly
+                                                                   class="form-control form-control-sm border border-0 bg-light p-0"
+                                                                   >
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col ms-1">
+                                                <div class="position-relative">
+
+                                                    <div class="row align-items-center ride-search-container mb-3 ">
+                                                    <div class="col-1">
+                                                        <i class="fa-solid fa-clock text-light-emphasis"></i>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="time">{% trans 'Time' %}</label>
+                                                        <div>
+                                                            <input type="hidden" name="time">
+                                                            <input autocomplete="off"
+                                                                   id="time"
+                                                                   name="time"
+                                                                   class="form-control form-control-sm border border-0 bg-light p-0"
+                                                                   type="text">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                    <div class="position-absolute z-3 w-100 overflow-hidden" style="top: 104%  ">
+
+                                                        <div class="card" >
+
+                                                            <div class="card-body">
+                                                                <div class="d-flex flex-row justify-content-around">
+
+                                                                    <div class="position-relative" >
+
+                                                                        <i id="upBtn" class="position-absolute top-0 fa-solid fa-chevron-up mb"></i>
+
+                                                                        <div class="hour_container overflow-y-hidden" style="height: 175px">
+                                                                            <div class="d-flex flex-column justify-content-center align-items-center mt-2 mb-2 "
+                                                                                 style="height: auto">
+                                                                                {% for hour in frHours %}
+                                                                                    <div class="fr-timer-section p-1 m-1">
+                                                                                        {{ hour }}
+                                                                                    </div>
+                                                                                {% endfor %}
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <i id="downClick"
+                                                                           class="position-absolute bottom-0 fa-solid fa-chevron-down pt-3"></i>
+
+                                                                    </div>
+
+
+                                                                </div>
+
+                                                            <div class="mt-4 text-center">
+                                                                <button class="btn btn-dark">Soumettre</button>
+                                                            </div>
+
+                                                            </div>
+
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="text-center">
+                                            <p class="fw-bold small">{% trans '15 minutes waits free of charge.' %}</p>
+                                        </div>
+
+                                        <div class="d-grid">
+                                            <button class="btn btn-lg btn-luxury"><i
+                                                    class="fa-light fa-magnifying-glass"></i> {% trans 'Search' %}
+                                            </button>
+                                        </div>
+
+                                    </form>
+                                </div>
+
+                            </div>
+
+                            <div class="tab-pane fade" id="profile" role="tabpanel"
+                                 aria-labelledby="profile-tab">
+                                <div class="pt-3 px-3">
+                                    <form action="" autocomplete="off">
+
+                                        <div class="row align-items-center ride-search-container mb-3 ">
+                                            <div class="col-1">
+                                                <i class="fa-solid fa-location-dot text-light-emphasis"></i>
+                                            </div>
+                                            <div class="col">
+                                                <label for="id">{% trans 'From' %}</label>
+                                                <div>
+                                                    <input autocomplete="off"
+                                                           placeholder="{% trans 'Address, airport, hotel, ...' %}"
+                                                           id="id"
+                                                           class="form-control form-control-sm border border-0 bg-light p-0"
+                                                           type="text">
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center ride-search-container mb-3 ">
+                                            <div class="col-1">
+                                                <i class="fa-solid fa-gauge-simple-high text-light-emphasis"></i>
+                                            </div>
+                                            <div class="col">
+                                                <label for="id">{% trans 'Duration' %}</label>
+                                                <div>
+                                                    <input autocomplete="off"
+                                                           placeholder="{% trans 'Address, airport, hotel, ...' %}"
+                                                           id="id"
+                                                           class="form-control form-control-sm border border-0 bg-light p-0"
+                                                           type="text">
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col me-1">
+                                                <div class="row align-items-center ride-search-container mb-3 ">
+                                                    <div class="col-1">
+                                                        <i class="fa-solid fa-calendar text-light-emphasis"></i>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="date">{% trans 'Date' %}</label>
+                                                        <div>
+                                                            <input type="hidden" name="date">
+                                                            <input autocomplete="off"
+                                                                   id="date"
+                                                                   class="form-control form-control-sm border border-0 bg-light p-0"
+                                                                   type="text">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col ms-1">
+                                                <div class="row align-items-center ride-search-container mb-3 ">
+                                                    <div class="col-1">
+                                                        <i class="fa-solid fa-clock text-light-emphasis"></i>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="time">{% trans 'Time' %}</label>
+                                                        <div>
+                                                            <input type="hidden" name="time">
+                                                            <input autocomplete="off"
+                                                                   id="time"
+                                                                   class="form-control form-control-sm border border-0 bg-light p-0"
+                                                                   type="text">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="text-center">
+                                            <p class="fw-bold small">{% trans '15 minutes waits free of charge.' %}</p>
+                                        </div>
+
+                                        <div class="d-grid">
+                                            <button class="btn btn-lg search-btn"><i
+                                                    class="fa-light fa-magnifying-glass"></i> {% trans 'Search' %}
+                                            </button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5"><h2 class="display-4 fw-bold font-playfair text-luxury-black mb-3">Our Premium
+                Services</h2>
+                <p class="lead text-muted">Discover our range of luxury transportation services designed to meet your
+                    every need</p></div>
+            <div class="row g-4">
+
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm card-hover">
+                        <div class="position-relative overflow-hidden">
+                            <img alt="City-to-City Rides"
+                                 src="{% static 'assets/imgs/luxury-sedan-chauffeur.png' %}"
+                                 class="card-img-top"
+                                 style="height: 200px; object-fit: cover;">
+                        </div>
+                        <div class="card-header bg-white border-0 pb-2">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="p-2 bg-warning bg-opacity-10 rounded me-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                         stroke-linejoin="round" class="lucide lucide-car text-luxury-gold">
+                                        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path>
+                                        <circle cx="7" cy="17" r="2"></circle>
+                                        <path d="M9 17h6"></path>
+                                        <circle cx="17" cy="17" r="2"></circle>
+                                    </svg>
+                                </div>
+                                <h5 class="card-title mb-0 fw-semibold">City-to-City Rides</h5></div>
+                        </div>
+                        <div class="card-body pt-0"><p class="card-text text-muted small">Premium intercity
+                            transportation with professional chauffeurs for long-distance comfort and reliability.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm card-hover">
+                        <div class="position-relative overflow-hidden">
+                            <img alt="Airport Transfers" class="card-img-top"
+                                 src="{% static 'assets/imgs/airport-transfer.jpeg' %}"
+                                 style="height: 200px; object-fit: cover;">
+                        </div>
+                        <div class="card-header bg-white border-0 pb-2">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="p-2 bg-warning bg-opacity-10 rounded me-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                         stroke-linejoin="round" class="lucide lucide-plane text-luxury-gold">
+                                        <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path>
+                                    </svg>
+                                </div>
+                                <h5 class="card-title mb-0 fw-semibold">Airport Transfers</h5></div>
+                        </div>
+                        <div class="card-body pt-0"><p class="card-text text-muted small">Seamless airport pickup and
+                            drop-off services with flight monitoring and meet-and-greet options.</p></div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm card-hover">
+                        <div class="position-relative overflow-hidden">
+                            <img alt="Hourly Bookings" class="card-img-top"
+                                 src="{% static 'assets/imgs/business-executive-chauffeur-city.png' %}"
+                                 style="height: 200px; object-fit: cover;">
+                        </div>
+                        <div class="card-header bg-white border-0 pb-2">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="p-2 bg-warning bg-opacity-10 rounded me-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                         stroke-linejoin="round" class="lucide lucide-clock text-luxury-gold">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </div>
+                                <h5 class="card-title mb-0 fw-semibold">Hourly Bookings</h5></div>
+                        </div>
+                        <div class="card-body pt-0"><p class="card-text text-muted small">Flexible hourly chauffeur
+                            service for business meetings, events, or personal appointments.</p></div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm card-hover">
+                        <div class="position-relative overflow-hidden">
+                            <img alt="VIP Protection" class="card-img-top"
+                                 src="{% static 'assets/imgs/luxury-armored-vehicle-vip-security.png' %}"
+                                 style="height: 200px; object-fit: cover;">
+                        </div>
+                        <div class="card-header bg-white border-0 pb-2">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="p-2 bg-warning bg-opacity-10 rounded me-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                         stroke-linejoin="round" class="lucide lucide-shield text-luxury-gold">
+                                        <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                                    </svg>
+                                </div>
+                                <h5 class="card-title mb-0 fw-semibold">VIP Protection</h5></div>
+                        </div>
+                        <div class="card-body pt-0"><p class="card-text text-muted small">Discreet and secure
+                            transportation for high-profile clients with trained security chauffeurs.</p></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    {# Section 2 #}
+    <section>
+        <div class="container mb-5 mt-5 section-3">
+            <div class="row align-items-center">
+
+                <div class="col-6">
+
+                    <div>
+                        <h2 class="text-uppercase display-5 fw-bold">A vehicle <br>for every <br> occasion</h2>
+                        <p>{% blocktranslate %}
+                            Sef Luxury Services offers you a fleet of high-end vehicles, comprising the most prestigious
+                            car brands, for private transfers, business trips, weddings or luxury tourism, special
+                            events, or tailor-made tours across Europe.
+                        {% endblocktranslate %}</p>
+                    </div>
+
+                </div>
+
+                <div class="col-6">
+
+                    <div class="overflow-hidden">
+                        <img class="img-fluid w-100" src="{% static 'assets/imgs/acd-fleet-feature.jpg' %}"
+                             alt="">
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <section class="py-5 mt-5 mb-5">
+
+        <div class="container">
+
+            <div class="bg-secondary-subtle rounded-3 p-5">
+
+                <h3 class="fw-bold mb-5">How does it work</h3>
+
+                <div class="row text-center text-md-start">
+
+                    <!-- Step 1 -->
+                    <div class="col-md-4 d-lg-flex">
+                        <div class="me-3">
+                            <span class="d-inline-flex align-items-center justify-content-center
+                                         bg-warning text-white rounded-circle fw-bold"
+                                  style="width: 40px; height: 40px;">1</span>
+                        </div>
+                        <div class="mt-3 mt-lg-0">
+                            <h6 class="fw-bold mb-1">Enter your route and select car</h6>
+                            <p class="text-muted small mb-0">
+                                Enter all the required data in the search field and then choose the desired vehicle.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="col-md-4 d-lg-flex">
+                        <div class="me-3">
+            <span class="d-inline-flex align-items-center justify-content-center
+                         bg-warning text-white rounded-circle fw-bold"
+                  style="width: 40px; height: 40px;">2</span>
+                        </div>
+                        <div class="mt-3 mt-lg-0">
+                            <h6 class="fw-bold mb-1">Complete booking form</h6>
+                            <p class="text-muted small mb-0">
+                                Enter the details of the lead passenger, add extras if you wish.
+                                Proceed to payment and receive your voucher.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="col-md-4 d-lg-flex">
+                        <div class="me-3">
+            <span class="d-inline-flex align-items-center justify-content-center
+                         bg-success bg-opacity-25 text-success rounded-circle fw-bold"
+                  style="width: 40px; height: 40px;">
+              <i class="fa-solid fa-check"></i>
+            </span>
+                        </div>
+                        <div class="mt-3 mt-lg-0">
+                            <h6 class="fw-bold mb-1">Meet your driver</h6>
+                            <p class="text-muted small mb-0">
+                                You will receive your driver's details 6 hours prior to pickup and he will be waiting
+                                for you on-site with a Name Sign.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="py-5 bg-light">
+
+        <div class="container">
+            <div class="row align-items-center g-5">
+
+                <!-- Left Image -->
+                <div class="col-12 col-sm-12 col-lg-6">
+                    <div class="shadow rounded-3 overflow-hidden">
+                        <img src="{% static 'assets/imgs/globa_coverage.jpeg' %}"
+                             alt="Travel" class="img-fluid w-100">
+                    </div>
+                </div>
+
+                <!-- Right Content -->
+                <div class="col-12 col-sm-12 col-lg-6">
+                    <small class="text-uppercase text-muted fw-semibold">
+                        Your Personal Chauffeur, At Your Fingertips
+                    </small>
+                    <h2 class="fw-bold mt-2">Global Coverage</h2>
+                    <p class="text-muted">
+                        Book your private chauffeur in seconds and enjoy a premium travel experience tailored to your
+                        schedule.
+                        Reliable, comfortable, and stress-free transportation is now easier than ever.
+                        Arrive at your destination refreshed, relaxed, and always on time.
+                    </p>
+                    <p class="text-muted">
+                        Whether you're traveling for business, leisure, or anything in between, our professional
+                        chauffeurs provide
+                        exceptional service to ensure your journey is smooth and effortless.
+                        Simply book online, and leave the rest to us.
+                    </p>
+
+                    <!-- Divider -->
+                    <div class="d-flex align-items-center my-4">
+                        <div class="flex-grow-1 border-top"></div>
+                        <div class="px-3 text-warning fs-3">
+                            <i class="fa-solid fa-plane"></i> <!-- Replace with your logo/icon -->
+                        </div>
+                        <div class="flex-grow-1 border-top"></div>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="row text-center">
+                        <div class="col-6 col-md-3">
+                            <h5 class="fw-bold">80+</h5>
+                            <p class="text-muted small mb-0">Countries</p>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <h5 class="fw-bold">2100+</h5>
+                            <p class="text-muted small mb-0">Cities</p>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <h5 class="fw-bold">670+</h5>
+                            <p class="text-muted small mb-0">Airports</p>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <h5 class="fw-bold">&infin;</h5>
+                            <p class="text-muted small mb-0">Routes</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <section class="py-5 mt-5 mb-5">
+
+        <div class="container">
+
+            <div class="bg-dark rounded-5 p-5 me-5 ms-5">
+
+                <h3 class="fw-bold mb-3 text-center text-white">Ready to book?</h3>
+
+                <div class="row justify-content-center">
+                    <!-- Step 1 -->
+                    <div class="col-md-5 d-lg-flex text-white text-center">
+                        <p style="font-size: 24px">Your journey starts here. Enjoy premium transfers tailored to your
+                            schedule — fast, secure, and hassle-free.</p>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button class="btn btn-gold">{% trans 'Book Now!' %}</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Stats Section -->
+    <section class="stats-section d-none">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stat-item">
+                        <div class="stat-number">500K+</div>
+                        <h5>Happy Customers</h5>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <h5>Cities Worldwide</h5>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <h5>Customer Support</h5>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stat-item">
+                        <div class="stat-number">99%</div>
+                        <h5>On-Time Rate</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js_extend %}
+
+    {% if language == "fr" %}
+
+        <script>
+        let shortDaysofWeek = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
+        var todayDate = shortDaysofWeek[moment().format('d')]
+        //$('input[id="dated"]').val(`${todayDate}. ` + moment().format(`DD MMM. YYYY`))
+        $('input[id="dated"]').val('09/11/2025')
+
+            $(function () {
+                let booking_date_picker = $('#dated').daterangepicker({
+
+                    "singleDatePicker": true,
+                    autoUpdateInput: false,
+                    "opens": "center",
+                    "drops": "auto",
+                    "autoApply": true,
+                     "minDate": "09/11/2025",
+                    "locale": {
+                        "daysOfWeek": [
+                            "Di",
+                            "Lu",
+                            "Ma",
+                            "Me",
+                            "Je",
+                            "Ve",
+                            "Sa"
+                        ],
+                        "monthNames": [
+                            "Janvier",
+                            "Février",
+                            "Mars",
+                            "Avril",
+                            "Mai",
+                            "Juin",
+                            "Juillet",
+                            "Août",
+                            "Septembre",
+                            "Octobre",
+                            "Novembre",
+                            "Decembre"
+                        ],
+                        "firstDay": 1
+                    },
+                }, function (start, end, label) {
+                    let dayName = shortDaysofWeek[start.format('d')]
+                     $('input[id="dated"]').val(`${dayName}. ` + start.format(`DD MMM. YYYY`))
+
+                });
+
+            });
+        </script>
+
+    {% endif %}
+
+    <script>
+        $(document).ready(function () {
+
+            var scrolled=0;
+
+            let wayForm = $('form#wayForm');
+            let way_from_address = $('input#way_from_address');
+            let way_to_address = $('input#way_to_address');
+            let closeMark = $('i.fa-circle-xmark')
+            let fr_timer_section = $('.fr-timer-section')
+
+
+
+            wayForm.on('submit', function (e) {
+                e.preventDefault();
+                let textInputs = $(this).find('input[type="text"]');
+                textInputs.each(function () {
+                    if ($(this).val() === '') {
+                        $(this).addClass('error-container')
+                        $(this).closest("div.ride-search-container").next('span').show()
+                    }
+                })
+
+            })
+
+            way_from_address.on('keyup', function (e) {
+                let query = ($(this).val());
+                let suggest_list = $(this).closest("div.ride-search-container").nextAll('#way_from_id_suggest').first()
+                if (query.length > 2) {
+
+                    let search_url = "{% url 'core:search_place' %}?search_input=" + query;
+
+                    $.get(`${search_url}`, function (result) {
+
+                        suggest_list.show();
+                        suggest_list.html(result);
+                    })
+                }
+            })
+
+            $(document).on('click', '#way_from_id_suggest .suggestion-list li', function () {
+                $('#way_from_id_suggest').hide();
+                way_from_address.val($(this).data('designation'));
+                $("#way_from_id_suggest").prevAll("div.ride-search-container").find('.fa-circle-xmark').removeClass('d-none')
+                $('.suggestion-list').empty();
+                $('#id_suggest').addClass('hide_suggest')
+            });
+
+            closeMark.on('click', function (e) {
+                let textInputs = $(this).closest("div.ride-search-container").find('input[type="text"]');
+                textInputs.each(function () {
+
+                    if ($(this).val() !== '') {
+                        $(this).val('')
+                    }
+                })
+            })
+
+            way_to_address.on('keyup', function (e) {
+                let query = ($(this).val());
+                let suggest_list = $(this).closest("div.ride-search-container").nextAll('#way_to_id_suggest').first()
+                if (query.length > 2) {
+
+                    let search_url = "{% url 'core:search_place' %}?search_input=" + query;
+
+                    $.get(`${search_url}`, function (result) {
+
+                        suggest_list.show();
+                        suggest_list.html(result);
+                    })
+                }
+            })
+
+            $(document).on('click', '#way_to_id_suggest .suggestion-list li', function () {
+                $('#way_to_id_suggest').hide();
+                way_to_address.val($(this).data('designation'));
+                $("#way_to_id_suggest").prevAll("div.ride-search-container").find('.fa-circle-xmark').removeClass('d-none')
+                $('.suggestion-list').empty();
+                $('#id_suggest').addClass('hide_suggest')
+            });
+
+            $(".fr-timer-section").each(function () {
+                let dd = $('.fr-timer-section')
+                $(this).on('click', function (e) {
+                    dd.removeClass('active')
+                    $(this).addClass('active');
+                })
+
+            })
+
+             const step = 50;
+
+            $("#upBtn").on("click", function () {
+                    $(".hour_container").animate({
+                        scrollTop: $(".hour_container").scrollTop() - step
+                    });
+                });
+
+
+             $("#downClick").on("click", function () {
+                scrolled = scrolled + 20;
+                 console.log(scrolled);
+                $(".hour_container").stop().animate({
+                    scrollTop: $(".hour_container").scrollTop() + step
+                });
+            });
+
+
+        })
+    </script>
+
+{% endblock %}

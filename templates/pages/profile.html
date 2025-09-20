@@ -1,0 +1,172 @@
+{% extends 'homepage/partials/page_layout.html' %}
+{% load static %}
+{% load i18n %}
+{% block css_extend %}
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container" style="margin-top: 70px">
+
+        <div class="row">
+
+            <div class="col-md-12  mt-5">
+
+                <h2 class="m-0">{% trans 'Profile' %}</h2>
+                <p class="p-0 text-muted">{% trans 'Manage your information' %}.</p>
+
+            </div>
+
+            <div class="col-md-12  mt-3">
+                <div class="row gx-lg-3">
+
+                    <div class="col-12 col-sm-4 col-lg-3">
+                        {% include 'pages/tab_menu_switcher.html' %}
+                    </div>
+
+                    <div class="col-12 col-sm-8 col-lg-8">
+
+                        <div class="card mb-3 shadow-sm">
+
+                            <form class="card-body account-form" id="" method="post">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <h4 class="row-title">{% trans 'Personal Information' %}</h4>
+                                </div>
+
+                                {% for message in messages %}
+
+                                    {% if message.extra_tags == "profile_update_error" %}
+                                        <div class="row justify-content-center mb-3">
+                                            <div class="col-md-8 text-center">
+                                                <div class="alert alert-danger p-2 alert-dismissible fade show"
+                                                     role="alert">
+                                                    {{ message }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% elif message.extra_tags == "profile_update_success" %}
+                                        <div class="row justify-content-center mb-3">
+                                            <div class="col-md-8 text-center">
+                                                <div class="alert alert-success p-2 alert-dismissible fade show"
+                                                     role="alert">
+                                                    {{ message }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                {% endfor %}
+
+
+                                <div class="row gy-3">
+
+                                    {% for field in profileForm %}
+                                        <div class="col-10 col-sm-10 col-lg-6">
+                                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                            {{ field }}
+                                        </div>
+                                    {% endfor %}
+
+                                </div>
+
+                                <div class="mt-4 float-end">
+                                    <button class="btn btn-dark">{% trans 'Update' %}</button>
+                                </div>
+
+
+                            </form>
+
+                        </div>
+
+                        <div class="card shadow-sm">
+
+                            <form class="card-body account-form">
+
+                                <div class="mb-3">
+                                    <h4 class="row-title">{% trans 'Password' %}</h4>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-10 col-sm-10 col-lg-6 d-flex flex-row justify-content-between">
+                                    <div>
+                                        <label for="account_password">{% trans 'Account Password' %}</label>
+                                        <p class="pass-holder"><b>************</b></p>
+                                    </div>
+                                    <div>
+                                        <i id="btn_ask_newPassword" class="fa-solid fa-pen" style="cursor: pointer"></i>
+                                    </div>
+                                </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    
+        <div class="row justify-content-center mt-5 d-none">
+
+            <div class="col-md-12">
+
+                <div class="card">
+                    <div class="card-body p-5">
+
+                        <div class="d-flex flex-row justify-content-between align-items-center">
+
+                            <div>
+                                <h5>{% trans "What's your next destination?" %}</h5>
+                            </div>
+
+                            <div>
+                                <button class="btn btn-dark btn-lg"><b>{% trans 'Book a new ride!' %}</b></button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block js_extend %}
+
+    <script>
+
+        $(document).ready(function () {
+
+            const btn_new_pass = $('#btn_ask_newPassword')
+            const successToast = $('#successToast')
+
+            btn_new_pass.on('click', function () {
+
+                let url = "{% url 'core:ask_password_reset' %}?email={{ request.user.email }}"
+                $.getJSON(url, function (result) {
+                    successToast.find('.toast-body').html(result.message)
+                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(successToast)
+                    toastBootstrap.show()
+                })
+
+            })
+
+        })
+
+    </script>
+
+
+{% endblock %}

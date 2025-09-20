@@ -1,0 +1,251 @@
+{% extends 'accounts/base.html' %}
+{% load i18n %}
+{% block css_extend %}
+    <style>
+        body {
+            background: #fff;
+        }
+
+        .iti {
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    {% load static %}
+    <div class="container">
+
+        <div class="row vh-100 d-flex justify-content-center align-items-center">
+
+            <div class="col-12 col-sm-8 col-lg-5 col-xl-5">
+
+                <div class="text-center">
+                    <div class="login-userset mb-4">
+                        <div class="login-logo logo-normal">
+                            <a href="">
+                                <img width="280"
+                                     src=" "
+                                     alt="SEF Services">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow border-0">
+                    <div class="card-body">
+                        <form method="POST" action="{% url 'core:signup_screen' %}" >
+                            {% csrf_token %}
+
+                            <div class="row d-flex justify-content-center mb-3">
+
+                                <div class="col-md-10">
+                                    <div class="text-muted text-center">
+                                        <h3>{% trans 'Account Registration' %}</h3>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row d-flex justify-content-center">
+
+                                <div class="col-md-10">
+                                    <div class="row gy-3">
+
+                                        <div class="col-md-12">
+                                            {{ SignupForm.last_name }}
+                                        </div>
+                                        <div class="col-md-12">
+                                            {{ SignupForm.first_name }}
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            {{ SignupForm.email }}
+                                            <span id="email_error" class="text-danger small"
+                                                              style="display:none; font-size: smaller">{% trans 'This email already exists.' %}</span>
+                                        </div>
+                                        <div class="col-md-12">
+                                            {{ SignupForm.phone }}
+                                            <span id="phone_error" style="display: none;"
+                                                              class="text-danger small"></span>
+                                        </div>
+                                        <div class="col-md-12">
+                                            {{ SignupForm.password }}
+                                        </div>
+                                        <div class="col-md-12">
+                                           <div class="form-check">
+                                               <input class="form-check-input" id="acknowledge" type="checkbox">
+                                               <label class="form-check-label" for="acknowledge">{% trans 'I agree to the ' %}<a target="_blank" class="text-decoration-none text-dark fw-bolder" href="">Terms and Conditions</a></label>
+                                           </div>
+                                        </div>
+
+                                        <input type="hidden" name="country_code">
+
+                                        {% if next_page %}
+                                            <input value="{{ next_page }}" name="next_page" type="hidden">
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-md-10">
+                                    <div class="mt-3">
+                                        <div class="d-grid">
+                                            <button id="signupBtn" type="submit" disabled
+                                                    class="btn btn-luxury">
+                                                {% trans 'Register' %}
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Divider -->
+                            <div class="d-flex align-items-center my-3">
+                                <div class="flex-grow-1 border-top"></div>
+                                <div class="px-3 text-warning">
+                                    OR <!-- Replace with your logo/icon -->
+                                </div>
+                                <div class="flex-grow-1 border-top"></div>
+                            </div>
+
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-md-10">
+                                    <div class="d-grid">
+                                        <a href="{% url 'social:begin' 'google-oauth2' %}" class="d-block btn btn-danger" >
+                                            <i class="fa-brands fa-google"></i>
+                                            {% translate 'Continue with Google' %}
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                           <div class="mt-3">
+                                <p>{% trans 'Have an account?' %} <a class="text-decoration-none text-dark fw-bolder" href="{% url 'core:login_screen' %}">{% trans 'Sign In' %}</a></p>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+{% endblock %}
+
+{% block js_extend %}
+
+    <script>
+        $(document).ready(function () {
+            console.log("ddd")
+            const errorMap = ["{% trans 'Invalid Number' %}", "{% trans 'Invalid country code' %}", "{% trans 'N° too short' %}", "{% trans 'N° too long' %}", "{% trans 'Invalid Number' %}"];
+            const input = document.querySelector("input#id_phone");
+
+            const iti = window.intlTelInput(input, {
+                allowDropdown: true,
+                initialCountry: "auto",
+                showFlags: true,
+                nationalMode: true,
+                hiddenInput: "phone_full",
+                geoIpLookup: callback => {
+                    fetch("https://ipapi.co/json")
+                        .then(res => res.json())
+                        .then(data => callback(data.country_code))
+                        .catch(() => callback("tg"));
+                },
+                utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.5.3/build/js/utils.js",
+                //loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@18.5.3/build/js/utils.js")
+            });
+
+            let emailValid = false;
+            let phoneValid = false;
+            let acknowledge = false;
+
+            let email_input = $('input#id_email');
+            let phone_input = $('input#id_phone');
+
+            let email_error = $('#email_error');
+            let phone_error = $('#phone_error');
+
+            function updateButtonState() {
+                if (emailValid && phoneValid && acknowledge) {
+                    $('#signupBtn').prop('disabled', false);
+                } else {
+                    $('#signupBtn').prop('disabled', true);
+                }
+            }
+
+            function validateField(fieldName, fieldValue, callback) {
+                fetch(`{% url 'core:check_existing_fields' %}?field=${fieldName}&value=${fieldValue}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        callback(data.valid);
+                    });
+            }
+
+            // Email live check
+            email_input.on('input', function () {
+                let email = $(this).val();
+                if (email.length > 3) {
+                    validateField('email', email, function (isValid) {
+                        emailValid = isValid;
+                        if (isValid) {
+                            email_error.hide()
+                            email_input.removeClass('fis-invalid')
+                        } else {
+                            email_error.show()
+                            email_input.addClass('fis-invalid')
+                        }
+                        updateButtonState();
+                    });
+                }
+            });
+
+            // Phone Live check
+            phone_input.on('input', function () {
+
+                if (iti.isValidNumber()) {
+                    $('input[name="country_code"]').val(iti.getSelectedCountryData().iso2)
+                    let phone = iti.getNumber()
+                    validateField('phone', phone, function (isValid) {
+                        phoneValid = isValid;
+                        if (isValid) {
+                            phone_error.hide()
+                            phone_input.removeClass('fis-invalid')
+                        } else {
+                            const msg = "{% trans 'This number already exists.' %}"
+                            phone_error.html(msg).show()
+                            phone_input.addClass('fis-invalid')
+                        }
+                        updateButtonState();
+                    });
+
+                } else {
+                    phoneValid = false;
+                    const errorCode = iti.getValidationError();
+                    const msg = errorMap[errorCode] || "{% trans 'Invalid Number' %}";
+                    phone_error.html(msg).show()
+                    updateButtonState();
+                }
+
+            })
+
+            $('#acknowledge').on('change', function () {
+                acknowledge = $(this).is(':checked');
+                updateButtonState();
+            });
+
+        });
+    </script>
+
+{% endblock %}

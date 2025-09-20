@@ -1,0 +1,87 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxeRide - Premium Chauffeur Service</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/fonts/inter-webfont/style.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/flags/css/flag-icons.min.css' %}" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'assets/fontawesome/css/brands.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fontawesome/css/solid.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fontawesome/css/duotone.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fontawesome/css/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fontawesome/css/regular.min.css' %}">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <!-- Google Fonts -->
+
+    {% block css_extend %}
+
+    {% endblock %}
+
+</head>
+<body>
+<!-- Navigation -->
+{% include 'homepage/partials/page_header.html' %}
+
+{% block content %}
+
+{% endblock %}
+
+{#  Success Alert  #}
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="successToast"
+         class="toast colored-toast bg-success-transparent fade hide" role="alert"
+         aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+        <div class="toast-header bg-success text-fixed-white">
+            <strong class="me-auto">{% trans 'Success!' %}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Your,toast message here.
+        </div>
+    </div>
+</div>
+{#  Success Alert  #}
+
+{#  Error Alert  #}
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="errorToast"
+         class="toast colored-toast bg-primary-transparent fade hide" role="alert"
+         aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+        <div class="toast-header bg-primary text-fixed-white">
+            <strong class="me-auto">{% trans 'Error!' %}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Your,toast message here.
+        </div>
+    </div>
+</div>
+{#  Error Alert  #}
+
+<!-- Footer -->
+{% include 'homepage/partials/footer.html' %}
+
+
+<!-- Bootstrap 5 JS -->
+<script src="{% static 'assets/js/bootstrap.bundle.js' %}"></script>
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+{% block js_extend %}
+
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,148 @@
+{% extends 'homepage/partials/page_layout.html' %}
+{% load static %}
+{% load i18n %}
+{% block css_extend %}
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container" style="margin-top: 70px">
+
+        <div class="row">
+
+            <div class="col-md-12  mt-5">
+
+                <h2>{% trans 'Bookings' %}</h2>
+
+            </div>
+
+            <div class="col-md-12  mt-5">
+
+                <div>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
+                                    type="button" role="tab" aria-controls="home" aria-selected="true">Home
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
+                                    type="button" role="tab" aria-controls="profile" aria-selected="false">Profile
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact"
+                                    type="button" role="tab" aria-controls="contact" aria-selected="false">Contact
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            This is the content for the Home tab.
+                        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            This is the content for the Profile tab.
+                        </div>
+                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                            This is the content for the Contact tab.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block js_extend %}
+
+    <script>
+        $(document).ready(function () {
+            // Booking tab functionality
+            $('.booking-tab').click(function () {
+                $('.booking-tab').removeClass('active');
+                $(this).addClass('active');
+
+                const tabType = $(this).data('tab');
+                // You can add different form layouts based on tab type
+                console.log('Selected tab:', tabType);
+            });
+
+            // Form submission
+            $('#bookingForm').submit(function (e) {
+                e.preventDefault();
+
+                // Collect form data
+                const formData = {
+                    from: $(this).find('input[placeholder*="Address, airport, hotel..."]:first').val(),
+                    to: $(this).find('input[placeholder*="Address, airport, hotel..."]:last').val(),
+                    date: $(this).find('input[type="date"]').val(),
+                    time: $(this).find('input[type="time"]').val(),
+                    passengers: $(this).find('select').val()
+                };
+
+                // Here you would send the data to your Django backend
+                console.log('Booking data:', formData);
+
+                // Show success message (replace with actual booking flow)
+                alert('Searching for available rides...');
+            });
+
+            // Smooth scrolling for navigation links
+            $('a[href^="#"]').click(function (e) {
+                e.preventDefault();
+                const target = $($(this).attr('href'));
+                if (target.length) {
+                    $('html, body').animate({
+                        scrollTop: target.offset().top - 80
+                    }, 800);
+                }
+            });
+
+            // Navbar background on scroll
+            $(window).scroll(function () {
+                if ($(window).scrollTop() > 50) {
+                    $('.navbar').addClass('scrolled');
+                } else {
+                    $('.navbar').removeClass('scrolled');
+                }
+            });
+
+            // Auto-populate current date and time
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
+            const currentTime = now.toTimeString().slice(0, 5);
+
+            $('input[type="date"]').val(today);
+            $('input[type="time"]').val(currentTime);
+        });
+    </script>
+
+    <script>
+        $(function () {
+            let booking_date_picker = $('#dated').daterangepicker({
+                opens: 'left',
+                "singleDatePicker": true,
+                autoUpdateInput: true,
+                "opens": "center",
+                "drops": "auto",
+                "autoApply": true,
+                "locale": {
+                    "format": "DD/MM/YYYY",
+                    "separator": " - ",
+                    "cancelLabel": "Effacer",
+                    "applyLabel": "Appliquer",
+                },
+            }, function (start, end, label) {
+                $('input[name="booking_start_date"]').val(start.format('YYYY-MM-DD'))
+                $('input[name="booking_end_date"]').val(end.format('YYYY-MM-DD'))
+            });
+
+        });
+    </script>
+
+{% endblock %}

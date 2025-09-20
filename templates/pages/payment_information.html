@@ -1,0 +1,375 @@
+{% extends 'homepage/partials/page_layout.html' %}
+{% load static %}
+{% load i18n %}
+{% block css_extend %}
+
+    <style>
+        .placeholder-glow .placeholder {
+            background: linear-gradient(to right, transparent 0%, rgba(216, 213, 213, 0.8) 50%, transparent 100%);
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                background-position: -200px 0;
+            }
+            100% {
+                background-position: calc(200px + 100%) 0;
+            }
+        }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container" style="margin-top: 70px">
+
+        <div class="row">
+
+            <div class="col-md-12  mt-5">
+
+                <h2 class="m-0">{% trans 'Payment' %}</h2>
+                <p class="p-0 text-muted">{% trans 'Manage your payment methods' %}.</p>
+
+            </div>
+
+            <div class="col-md-12  mt-3">
+                <div class="row gx-lg-3">
+
+                    <div class="col-12 col-sm-4 col-lg-3">
+                        {% include 'pages/tab_menu_switcher.html' %}
+                    </div>
+
+                    <div class="col-12 col-sm-8 col-lg-8">
+
+                        <div class="card mb-3 shadow-sm">
+
+                            <form class="card-body account-form" id="" method="post">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <h4 class="row-title">{% trans 'Payment Methods' %}</h4>
+                                </div>
+
+                                {% for message in messages %}
+
+                                    {% if message.extra_tags == "profile_update_error" %}
+                                        <div class="row justify-content-center mb-3">
+                                            <div class="col-md-8 text-center">
+                                                <div class="alert alert-danger p-2 alert-dismissible fade show"
+                                                     role="alert">
+                                                    {{ message }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% elif message.extra_tags == "profile_update_success" %}
+                                        <div class="row justify-content-center mb-3">
+                                            <div class="col-md-8 text-center">
+                                                <div class="alert alert-success p-2 alert-dismissible fade show"
+                                                     role="alert">
+                                                    {{ message }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                {% endfor %}
+
+                                <div class="overflow-y-scroll overflow-x-hidden w-100" style="height: 200px;">
+
+                                    {% if payment_methods %}
+
+                                        {% for payment_method in payment_methods %}
+
+                                            <div class="row mb-3 p-1 m-1 shadow-sm">
+
+                                                <div class="col-8 col-md-7 col-lg-4 d-flex align-items-center">
+
+                                                    <div class="me-3">
+                                                        {% if payment_method.brand == "visa" %}
+                                                            <img width="35"
+                                                                 src="{% static 'assets/imgs/visa_card_logo.png' %}"
+                                                                 alt="">
+                                                        {% elif payment_method.brand == "mastercard" %}
+                                                            <img width="35"
+                                                                 src="{% static 'assets/imgs/master_card_logo.png' %}"
+                                                                 alt="">
+                                                        {% elif payment_method.brand == "amex" %}
+                                                            <img width="35"
+                                                                 src="{% static 'assets/imgs/american_express_card_logo.png' %}"
+                                                                 alt="">
+                                                        {% else %}
+
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="justify-content-between align-items-center">
+                                                        <span><strong>****{{ payment_method.last4 }}</strong></span>
+                                                        <span class=""><i class="fa-solid fa-circle text-muted"
+                                                                          style="font-size: 6px"></i></span>
+                                                        <span><strong>{{ payment_method.exp_month }}/{{ payment_method.exp_year }}</strong></span>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="col-2 col-sm-1  col-md-2 col-lg-2 d-flex justify-content-center">
+                                                    {% if payment_method.is_default %}
+                                                        <span class="badge text-bg-success small">Primary</span>
+                                                    {% else %}
+                                                        <span></span>
+                                                    {% endif %}
+                                                </div>
+
+                                                <div class="col-1 col-sm-1  col-md-2 col-lg-1 align-items-center">
+
+                                                   <div class="dropend">
+                                                        <i class="fa-solid fa-ellipsis-vertical" style="font-size: 20px; cursor: pointer"
+                                                       data-bs-toggle="dropdown"
+                                                    ></i>
+
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" onclick="location.href='{% url 'core:card_action' payment_method.id %}?action=make_default'" href="#">{% trans "Make default" %}</a></li>
+                                                        {% if not payment_method.is_default %}
+                                                            <li><a class="dropdown-item" onclick="location.href='{% url 'core:card_action' payment_method.id %}?action=remove_card'" href="#">{% trans "Remove" %}</a></li>
+                                                        {% endif %}
+                                                    </ul>
+                                                   </div>
+                                                </div>
+
+                                            </div>
+
+                                        {% endfor %}
+
+                                    {% else %}
+
+                                        ll
+
+                                    {% endif %}
+
+                                </div>
+
+
+                            </form>
+
+                        </div>
+
+                        <div class="card border-0">
+
+                            <form class="card-body account-form">
+
+                                <div class="row justify-content-center">
+                                    <div class="col-12 col-sm-10 col-lg-6">
+
+                                        <div class="d-grid">
+                                            <button type="button" class="btn btn-outline-dark border-2"
+                                                    data-bs-toggle="modal" data-bs-target="#addCardModal">
+                                                <i class="fa-duotone fa-credit-card"></i>&nbsp; Add new card
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row justify-content-center mt-5 d-none">
+
+            <div class="col-md-12">
+
+                <div class="card">
+                    <div class="card-body p-5">
+
+                        <div class="d-flex flex-row justify-content-between align-items-center">
+
+                            <div>
+                                <h5>{% trans "What's your next destination?" %}</h5>
+                            </div>
+
+                            <div>
+                                <button class="btn btn-dark btn-lg"><b>{% trans 'Book a new ride!' %}</b></button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Add Credit Card Modal -->
+    <div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">{% trans 'Add new card' %}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="card-form">
+                    <div class="modal-body">
+                        <!-- Shimmer placeholder -->
+                        <div id="card-loading" class="placeholder-glow">
+                            <div class="placeholder col-12" style="height: 38px; border-radius: 4px;"></div>
+                        </div>
+                        <div id="card-element"></div>
+                        <div id="card-errors" class="text-danger mt-3"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger"
+                                data-bs-dismiss="modal">
+                            {% trans 'Close' %}
+                        </button>
+
+                        <button disabled id="btn_saveCard" type="submit"
+                                class="btn btn-dark">{% trans 'Save' %}</button>
+
+                        <button style="display: none;" id="btn_pending" class="btn btn-dark" type="button" disabled>
+                            <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+                            <span role="status">Please wait...</span>
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js_extend %}
+
+    <script src="https://js.stripe.com/v3/"></script>
+
+
+    <script>
+
+        $(document).ready(function () {
+
+            const stripe = Stripe("{{ STRIPE_PUBLIC_KEY }}");
+            const elements = stripe.elements();
+            const card = elements.create("card");
+
+            const modalEl = $("#addCardModal");
+            const cardLoading = $("#card-loading");
+            const card_form = $("form#card-form");
+            const cardErrors = $("#card-errors");
+            const btn_saveCard = $("#btn_saveCard");
+            const btn_pending = $("#btn_pending");
+
+            const btn_new_pass = $('#btn_ask_newPassword')
+            const successToast = $('#successToast')
+
+            btn_new_pass.on('click', function () {
+
+                let url = "{% url 'core:ask_password_reset' %}?email={{ request.user.email }}"
+                $.getJSON(url, function (result) {
+                    successToast.find('.toast-body').html(result.message)
+                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(successToast)
+                    toastBootstrap.show()
+                })
+
+            })
+
+            modalEl.on("shown.bs.modal", () => {
+                card.mount("#card-element");
+            });
+
+            modalEl.on("hidden.bs.modal", () => {
+                console.log("hided")
+                cardLoading.show()
+                card.unmount()
+                cardErrors.html('');
+
+
+            });
+
+            card.on('ready', function (event) {
+                // Handle ready event
+                cardLoading.hide()
+                console.log("card ready")
+            });
+
+            card.on('change', function (event) {
+                if (event.complete) {
+                    btn_saveCard.removeAttr('disabled')
+                } else if (event.error) {
+                    // show validation to customer
+                    console.log(event.error.message)
+                } else {
+                    btn_saveCard.attr('disabled', 'disabled')
+                }
+            });
+
+            card_form.on("submit", async (e) => {
+
+                e.preventDefault();
+                btn_saveCard.hide()
+                btn_pending.show()
+
+                // Step 1 - Getting Setup Intent Secret
+                const intentRes = await fetch("{% url 'core:card_authorization' %}");
+
+                const {client_secret} = await intentRes.json();
+
+                // Confirmation of Intent
+                const {setupIntent, error} = await stripe.confirmCardSetup(client_secret, {
+                    payment_method: {
+                        card: card,
+                    }
+                });
+
+                if (error) {
+                    console.log(error)
+                    btn_saveCard.show()
+                    btn_pending.hide()
+                    cardErrors.html(error.message);
+
+                } else {
+
+                    // Step 3: Send payment_method.id to backend
+                    $.post("{% url 'core:saving_payment_method' %}", {
+                        payment_method_id: setupIntent.payment_method,
+                        status: setupIntent.status,
+                    }, function (result) {
+
+                        if (result.status === "success") {
+                            modalEl.modal('hide')
+                            btn_saveCard.show()
+                            btn_pending.hide()
+
+                            successToast.find('.toast-body').html(result.message)
+                            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(successToast)
+                            toastBootstrap.show()
+                        }
+
+                    })
+
+                }
+
+            });
+
+
+        })
+
+    </script>
+
+
+
+
+
+{% endblock %}

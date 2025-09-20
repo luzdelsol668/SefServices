@@ -1,0 +1,36 @@
+{% load i18n %}
+{% load static %}
+
+<div class="row bg-white shadow-sm border rounded p-0">
+    <div style="height: 185px;overflow-y: auto;" class="p-0">
+        <ul class="suggestion-list p-2">
+            {% for place in places %}
+                <li class="pointer" data-id="{{ place.placeId }}" data-designation="{{ place.mainText }}">
+                    <div class="d-flex gap-2 border-bottom border-1 border-dark-subtle py-2 w-100">
+                        <div>
+                            {% if "hotel" in place.types %}
+                                <i class="fa-solid fa-hotel"></i>
+                            {% elif "international_airport" in place.types or "airport" in place.types %}
+                                <i class="fa-solid fa-plane-up"></i>
+                            {% elif "store" in place.types %}
+                                <i class="fa-solid fa-building"></i>
+                            {% elif "bus_station" in place.types %}
+                                <i class="fa-solid fa-bus-simple"></i>
+                            {% elif "establishment" in place.types %}
+                                <i class="fa-solid fa-building"></i>
+                            {% else %}
+                                <i class="fa-solid fa-location-dot"></i>
+                            {% endif %}
+                        </div>
+                        <div class="">
+                            <h2 class="small p-0 m-0">{{ place.mainText }}</h2>
+                            <span style="font-size: smaller" class="p-0 m-0">{{ place.secondaryText }}</span>
+                        </div>
+                    </div>
+                </li>
+            {% empty %}
+                <li>Aucune information trouvée</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

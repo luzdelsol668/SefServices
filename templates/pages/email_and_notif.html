@@ -1,0 +1,241 @@
+{% extends 'homepage/partials/page_layout.html' %}
+{% load static %}
+{% load i18n %}
+{% block css_extend %}
+
+    <style>
+        .placeholder-glow .placeholder {
+            background: linear-gradient(to right, transparent 0%, rgba(216, 213, 213, 0.8) 50%, transparent 100%);
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                background-position: -200px 0;
+            }
+            100% {
+                background-position: calc(200px + 100%) 0;
+            }
+        }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container" style="margin-top: 70px">
+
+        <div class="row">
+
+            <div class="col-md-12  mt-5">
+
+                <h2 class="m-0">{% trans 'Email & Notification' %}</h2>
+                <p class="p-0 text-muted">{% trans 'Manage your notifications' %}.</p>
+
+            </div>
+
+            <div class="col-md-12  mt-3">
+                <div class="row gx-lg-3">
+
+                    <div class="col-12 col-sm-4 col-lg-3">
+                        {% include 'pages/tab_menu_switcher.html' %}
+                    </div>
+
+                    <div class="col-12 col-sm-8 col-lg-8">
+
+                          <div class="card mb-3 shadow-sm">
+
+                            <form class="card-body account-form" id="" method="post">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <h4 class="row-title">{% trans 'Email & Notification' %}</h4>
+                                </div>
+
+                                {% for message in messages %}
+
+                                    {% if message.extra_tags == "profile_update_error" %}
+                                        <div class="row justify-content-center mb-3">
+                                            <div class="col-md-8 text-center">
+                                                <div class="alert alert-danger p-2 alert-dismissible fade show"
+                                                     role="alert">
+                                                    {{ message }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% elif message.extra_tags == "notif_update_success" %}
+                                        <div class="row justify-content-center mb-3">
+                                            <div class="col-md-8 text-center">
+                                                <div class="alert alert-success p-2 alert-dismissible fade show"
+                                                     role="alert">
+                                                    {{ message }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                {% endfor %}
+
+
+                                <div class="row gy-3 mb-3">
+                                    <div class="col-10 col-sm-10 col-lg-6">
+                                        <p>Marketing emails</p>
+                                        {{ notifForm.is_marketing_enabled }} <label for="{{ notifForm.is_marketing_enabled.id_for_label }}">{{ notifForm.is_marketing_enabled.label }}</label>
+                                    </div>
+                                </div>
+                                <div class="row gy-3">
+                                    <div class="col-10 col-sm-10 col-lg-6">
+                                        <p>Booking notifications</p>
+                                        <div class="mb-2">
+                                            {{ notifForm.is_sms_enabled }} <label for="{{ notifForm.is_sms_enabled.id_for_label }}">{{ notifForm.is_sms_enabled.label }}</label>
+                                        </div>
+                                        <div>
+                                            {{ notifForm.is_email_enabled }} <label for="{{ notifForm.is_email_enabled.id_for_label }}">{{ notifForm.is_email_enabled.label }}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 float-end">
+                                    <button class="btn btn-dark">{% trans 'Update' %}</button>
+                                </div>
+
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js_extend %}
+
+    <script src="https://js.stripe.com/v3/"></script>
+
+
+    <script>
+
+        $(document).ready(function () {
+
+            const stripe = Stripe("{{ STRIPE_PUBLIC_KEY }}");
+            const elements = stripe.elements();
+            const card = elements.create("card");
+
+            const modalEl = $("#addCardModal");
+            const cardLoading = $("#card-loading");
+            const card_form = $("form#card-form");
+            const cardErrors = $("#card-errors");
+            const btn_saveCard = $("#btn_saveCard");
+            const btn_pending = $("#btn_pending");
+
+            const btn_new_pass = $('#btn_ask_newPassword')
+            const successToast = $('#successToast')
+
+            btn_new_pass.on('click', function () {
+
+                let url = "{% url 'core:ask_password_reset' %}?email={{ request.user.email }}"
+                $.getJSON(url, function (result) {
+                    successToast.find('.toast-body').html(result.message)
+                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(successToast)
+                    toastBootstrap.show()
+                })
+
+            })
+
+            modalEl.on("shown.bs.modal", () => {
+                card.mount("#card-element");
+            });
+
+            modalEl.on("hidden.bs.modal", () => {
+                console.log("hided")
+                cardLoading.show()
+                card.unmount()
+                cardErrors.html('');
+
+
+            });
+
+            card.on('ready', function (event) {
+                // Handle ready event
+                cardLoading.hide()
+                console.log("card ready")
+            });
+
+            card.on('change', function (event) {
+                if (event.complete) {
+                    btn_saveCard.removeAttr('disabled')
+                } else if (event.error) {
+                    // show validation to customer
+                    console.log(event.error.message)
+                } else {
+                    btn_saveCard.attr('disabled', 'disabled')
+                }
+            });
+
+            card_form.on("submit", async (e) => {
+
+                e.preventDefault();
+                btn_saveCard.hide()
+                btn_pending.show()
+
+                // Step 1 - Getting Setup Intent Secret
+                const intentRes = await fetch("{% url 'core:card_authorization' %}");
+
+                const {client_secret} = await intentRes.json();
+
+                // Confirmation of Intent
+                const {setupIntent, error} = await stripe.confirmCardSetup(client_secret, {
+                    payment_method: {
+                        card: card,
+                    }
+                });
+
+                if (error) {
+                    console.log(error)
+                    btn_saveCard.show()
+                    btn_pending.hide()
+                    cardErrors.html(error.message);
+
+                } else {
+
+                    // Step 3: Send payment_method.id to backend
+                    $.post("{% url 'core:saving_payment_method' %}", {
+                        payment_method_id: setupIntent.payment_method,
+                        status: setupIntent.status,
+                    }, function (result) {
+
+                        if (result.status === "success") {
+                            modalEl.modal('hide')
+                            btn_saveCard.show()
+                            btn_pending.hide()
+
+                            successToast.find('.toast-body').html(result.message)
+                            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(successToast)
+                            toastBootstrap.show()
+                        }
+
+                    })
+
+                }
+
+            });
+
+
+        })
+
+    </script>
+
+
+
+
+
+{% endblock %}

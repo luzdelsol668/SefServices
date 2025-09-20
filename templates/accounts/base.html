@@ -1,0 +1,52 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxeRide - Premium Chauffeur Service</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/fonts/inter-webfont/style.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/custom.css' %}" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'assets/fontawesome/css/brands.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fontawesome/css/solid.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fontawesome/css/duotone.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fontawesome/css/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fontawesome/css/regular.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.5.3/build/css/intlTelInput.min.css">
+
+
+
+
+    {% block css_extend %}
+
+    {% endblock %}
+
+</head>
+<body>
+
+{% block content %}
+
+{% endblock %}
+
+
+<!-- Bootstrap 5 JS -->
+<script src="{% static 'assets/js/bootstrap.bundle.js' %}"></script>
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.5.3/build/js/intlTelInput.min.js"></script>
+
+{% block js_extend %}
+
+{% endblock %}
+</body>
+</html>

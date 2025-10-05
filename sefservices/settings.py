@@ -20,7 +20,6 @@ SECRET_KEY = 'django-insecure-r-#tu=!6=5n8-b==5jo70p545@uz0fa2-rgsqei9l_zqrhrsc9
 ALLOWED_HOSTS = env_config('ALLOWED_HOSTS').split(',')
 
 SITE_URL = env_config('SITE_URL')
-CSRF_TRUSTED_ORIGINS = ['https://60a71fbdb0c6.ngrok-free.app']
 
 if PRODUCTION:
     CSRF_TRUSTED_ORIGINS = env_config('SITE_URL').split(',')

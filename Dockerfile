@@ -39,7 +39,7 @@ COPY . /app
 COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 RUN pip install --upgrade pip
-RUN pip install --timeout=1000 --no-cache-dir -r requirement.txt
+RUN pip install --timeout=1000 --no-cache-dir -r requirements.txt
 
 RUN python manage.py collectstatic --noinput
 

@@ -9,6 +9,7 @@ CairoSVG==2.8.2
 certifi==2025.7.14
 cffi==1.17.1
 charset-normalizer==3.4.2
+cryptography==45.0.6
 cssselect2==0.8.0
 defusedxml==0.7.1
 Django==4.2.23
@@ -16,6 +17,7 @@ django-countries==7.6.1
 django-formtools==2.5.1
 django-picklefield==3.3
 django-q2==1.7.4
+django-qrcode==0.3
 django-storages==1.14.6
 django-tenants==3.8.0
 et_xmlfile==2.0.0
@@ -26,6 +28,7 @@ imgkit==1.2.3
 importlib_metadata==8.7.0
 jmespath==1.0.1
 minio==7.2.16
+oauthlib==3.3.1
 openpyxl==3.1.5
 packaging==25.0
 pillow==11.3.0
@@ -33,14 +36,20 @@ psycopg2==2.9.9
 pycountry==24.6.1
 pycparser==2.22
 pycryptodome==3.23.0
+PyJWT==2.10.1
 pyphen==0.17.2
 python-dateutil==2.9.0.post0
 python-decouple==3.8
+python3-openid==3.2.0
 requests==2.32.4
+requests-oauthlib==2.0.0
 s3transfer==0.13.1
 sib-api-v3-sdk==7.6.0
 six==1.17.0
+social-auth-app-django==5.4.3
+social-auth-core==4.7.0
 sqlparse==0.5.3
+stripe==12.4.0
 tinycss2==1.4.0
 typing_extensions==4.14.1
 tzdata==2025.2

@@ -56,4 +56,5 @@ tzdata==2025.2
 urllib3==1.26.20
 WeasyPrint==52.5
 webencodings==0.5.1
+whitenoise==6.5.0
 zipp==3.23.0

@@ -7,19 +7,24 @@ from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# Loading environment variable to the project
 
 locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
 
 DEBUG = env_config('DEBUG', cast=bool)
-APP_NAME = env_config('APP_NAME')
 PRODUCTION = env_config('PRODUCTION', cast=bool)
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-n7x16*az%n4c!!#(!y&en043%l7=#2pm&jd3*c60jz7c2gv%z)'
 
-SECRET_KEY = 'django-insecure-r-#tu=!6=5n8-b==5jo70p545@uz0fa2-rgsqei9l_zqrhrsc9'
-
+# SECURITY WARNING: don't run with debug turned on in production!
 ALLOWED_HOSTS = env_config('ALLOWED_HOSTS').split(',')
 
 SITE_URL = env_config('SITE_URL')
+
+CONN_MAX_AGE = None
+
+# Custom App Settings
 
 if PRODUCTION:
     CSRF_TRUSTED_ORIGINS = env_config('SITE_URL').split(',')
@@ -27,13 +32,8 @@ if PRODUCTION:
     USE_X_FORWARDED_HOST = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-CONN_MAX_AGE = None
-
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_COOKIE_AGE = 210 * 60  #
-
 Q_CLUSTER = {
-    'name': "mysaas",
+    'name': "cetef",
     'workers': 2,  # Number of workers. Set as None to match CPU count
     'timeout': 60,  # Limit on how long a task is allowed to take, in seconds.
     'retry': 300,
@@ -46,7 +46,10 @@ Q_CLUSTER = {
     'log_level': 'DEBUG'
 }
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 210 * 60  #
 
+# Captcha Settings
 CAPTCHA_SITE_KEY = env_config('CAPTCHA_SITE_KEY')
 CAPTCHA_SECRET_KEY = env_config('CAPTCHA_SECRET_KEY')
 
@@ -57,20 +60,20 @@ AWS_ACCESS_KEY_ID = env_config('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = env_config('AWS_SECRET_ACCESS_KEY')
 AWS_S3_ENDPOINT_URL = env_config('AWS_S3_ENDPOINT_URL')
 AWS_S3_PREVIEW_URL = env_config('AWS_S3_PREVIEW_URL')
-AWS_STORAGE_BUCKET_NAME = 'storesaas'
-AWS_S3_FILE_OVERWRITE = True
-AWS_DEFAULT_ACL = None
-AWS_S3_ADDRESSING_STYLE = "path"
+AWS_STORAGE_BUCKET_NAME = env_config('AWS_STORAGE_BUCKET_NAME')
 
-# --- Static Files ---
-#STATICFILES_STORAGE = 'coreservice.storages.StaticStorage'
-#STATIC_URL = f'{AWS_S3_PREVIEW_URL}/{AWS_STORAGE_BUCKET_NAME}/static/'
+# Optional but recommended
+#AWS_S3_FILE_OVERWRITE = True
+#AWS_DEFAULT_ACL = None
+#AWS_S3_VERIFY = True  # or False if you use self-signed cert
+#AWS_QUERYSTRING_AUTH = False  # For public file access
 
-STATIC_URL = '/storage/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = os.path.join(BASE_DIR, 'fileassets')
-
-
+if PRODUCTION:
+    # --- Static Files ---
+    STATICFILES_STORAGE = 'coreservice.storages.StaticStorage'
+    STATIC_URL = f'{AWS_S3_PREVIEW_URL}/{AWS_STORAGE_BUCKET_NAME}/static/'
+else:
+    STATIC_URL = '/static/'
 # --- Media Files ---
 DEFAULT_FILE_STORAGE = 'coreservice.storages.MediaStorage'
 MEDIA_URL = f'{AWS_S3_PREVIEW_URL}/{AWS_STORAGE_BUCKET_NAME}/medias/'

@@ -75,9 +75,11 @@ if PRODUCTION:
     STATIC_URL = f'{AWS_S3_PREVIEW_URL}/{AWS_STORAGE_BUCKET_NAME}/static/'
 else:
     STATIC_URL = '/static/'
-    STATICFILES_DIRS = [
-        BASE_DIR / "static",
-    ]
+    STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 # --- Media Files ---
 DEFAULT_FILE_STORAGE = 'coreservice.storages.MediaStorage'
 MEDIA_URL = f'{AWS_S3_PREVIEW_URL}/{AWS_STORAGE_BUCKET_NAME}/medias/'

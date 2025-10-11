@@ -61,6 +61,7 @@ AWS_SECRET_ACCESS_KEY = env_config('AWS_SECRET_ACCESS_KEY')
 AWS_S3_ENDPOINT_URL = env_config('AWS_S3_ENDPOINT_URL')
 AWS_S3_PREVIEW_URL = env_config('AWS_S3_PREVIEW_URL')
 AWS_STORAGE_BUCKET_NAME = env_config('AWS_STORAGE_BUCKET_NAME')
+AWS_DEFAULT_ACL = None
 
 # Optional but recommended
 #AWS_S3_FILE_OVERWRITE = True
@@ -74,6 +75,9 @@ if PRODUCTION:
     STATIC_URL = f'{AWS_S3_PREVIEW_URL}/{AWS_STORAGE_BUCKET_NAME}/static/'
 else:
     STATIC_URL = '/static/'
+    STATICFILES_DIRS = [
+        BASE_DIR / "static",
+    ]
 # --- Media Files ---
 DEFAULT_FILE_STORAGE = 'coreservice.storages.MediaStorage'
 MEDIA_URL = f'{AWS_S3_PREVIEW_URL}/{AWS_STORAGE_BUCKET_NAME}/medias/'

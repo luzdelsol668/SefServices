@@ -1,0 +1,83 @@
+{% load static %}
+{% block sidebar %}
+    <!-- ========== App Menu ========== -->
+    <div class="app-menu navbar-menu">
+        <!-- LOGO -->
+        <div class="navbar-brand-box">
+            <!-- Dark Logo-->
+            <a href="" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img src="{% static 'admin/images/logo-sm.pngb' %}" alt="" height="22">
+                    </span>
+                <span class="logo-lg">
+                        <img src="{% static 'admin/images/logo-dark.pngb' %}" alt="" height="17">
+                    </span>
+            </a>
+            <!-- Light Logo-->
+            <a href="" class="logo logo-light">
+                    <span class="logo-sm">
+                        <img src="{% static 'admin/images/logo-sm.pngb' %}" alt="" height="22">
+                    </span>
+                <span class="logo-lg">
+                        <img src="{% static 'admin/images/logo-light.pngb' %}" alt="" height="17">
+                    </span>
+            </a>
+            <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
+                    id="vertical-hover">
+                <i class="ri-record-circle-line"></i>
+            </button>
+        </div>
+
+        <div id="scrollbar">
+            <div class="container-fluid">
+
+                <div id="two-column-menu">
+                </div>
+                <ul class="navbar-nav" id="navbar-nav">
+
+                    <li class="menu-title"><span data-key="t-menu">Menu</span></li>
+
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{% url 'admin:dashboard_screen' %}">
+                            <i class="ri-dashboard-2-line"></i> <span>Tableau de Bord</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse"
+                           role="button"
+                           aria-expanded="false" aria-controls="sidebarDashboards">
+                            <i class="ri-building-4-line"></i> <span>Gestion de Véhicules</span>
+                        </a>
+
+                        <div class="collapse menu-dropdown" id="sidebarDashboards">
+                            <ul class="nav nav-sm flex-column">
+
+                                    <li class="nav-item">
+                                        <a href="{% url 'admin:liste-des-categories' %}" class="nav-link">Catégories</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'admin:liste-de-partenaires' %}" class="nav-link">Partenaires</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'admin:liste-de-chauffeur' %}" class="nav-link">Chauffeurs</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'admin:liste_de_voitures' %}" class="nav-link">Liste de
+                                            Voitures</a>
+                                    </li> 
+                            </ul>
+                        </div>
+                    </li> <!-- end Dashboard Menu -->
+
+                </ul>
+            </div>
+            <!-- Sidebar -->
+        </div>
+        <div class="sidebar-background"></div>
+    </div>
+    <!-- Left Sidebar End -->
+    <!-- Vertical Overlay-->
+    <div class="vertical-overlay"></div>
+{% endblock sidebar %}
+    

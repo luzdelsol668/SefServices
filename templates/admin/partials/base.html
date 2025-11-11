@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" {% block html %}data-layout="horizontal" data-theme="corporate" data-topbar="dark" data-bs-theme="light"
+      data-sidebar="dark" data-sidebar-size="lg" data-layout-width="fluid" data-sidebar-image="none"
+      data-preloader="enable" {% endblock html %}>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'admin/images/cetef/favicon.ico' %}">
+    <link rel="shortcut icon" href="{% static 'admin/venobox/venobox.min.css' %}">
+    <!--datatable css-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+
+
+    {% block seo %}
+
+    {% endblock %}
+
+
+    {% block css %}
+
+        <!-- Layout config Js -->
+        <script src="{% static 'admin/js/layout.js' %}"></script>
+        <!-- Bootstrap Css -->
+        <link href="{% static 'admin/css/mystyle.css' %}" id="bootstrap-style" rel="stylesheet" type="text/css"/>
+        <link href="{% static 'admin/css/bootstrap.min.css' %}" id="bootstrap-style" rel="stylesheet" type="text/css"/>
+        <!-- Icons Css -->
+        <link href="{% static 'admin/css/icons.min.css' %}" rel="stylesheet" type="text/css"/>
+        <!-- App Css-->
+        <link href="{% static 'admin/css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css"/>
+        <link href="{% static 'admin/libs/toastify-js/src/toastify.css' %}" id="app-style" rel="stylesheet" type="text/css"/>
+        <!-- custom Css-->
+        <link href="{% static 'admin/css/custom.min.css' %}" id="app-style" rel="stylesheet" type="text/css"/>
+
+
+    {% endblock css %}
+    {% block extra_css %}
+    {% endblock extra_css %}
+
+</head>
+
+<body>
+<!-- Begin page -->
+<div id="layout-wrapper">
+    {% block header %}
+        {% include "admin/partials/topbar.html" %}
+    {% endblock header %}
+    {% block sidebar %}
+        {% include "admin/partials/sidebar.html" %}
+    {% endblock sidebar %}
+    {% block content %}
+        {% block pagetitle %}
+        {% endblock pagetitle %}
+        {% block footer %}
+        {% endblock footer %}
+    {% endblock content %}
+</div>
+
+{% block extra_content %}
+{% endblock extra_content %}
+
+{% block javascript %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- JAVASCRIPT -->
+    <script src="{% static 'admin/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'admin/libs/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'admin/libs/node-waves/dist/waves.min.js' %}"></script>
+    <script src="{% static 'admin/libs/feather-icons/dist/feather.min.js' %}"></script>
+    <script src="{% static 'admin/libs/toastify-js/src/toastify.js' %}"></script>
+    <script src="{% static 'admin/js/pages/plugins/lord-icon-2.1.0.js' %}"></script>
+    <script src="{% static 'admin/js/plugins.js' %}"></script>
+    <script src="{% static 'admin/venobox/venobox.min.js' %}"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+
+    <script src="https://unpkg.com/htmx.org@2.0.4"
+            integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
+            crossorigin="anonymous"></script>
+
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+
+
+    {% block extra_js %}
+    {% endblock extra_js %}
+
+    <!-- App js -->
+    <script src="{% static 'admin/js/app.js' %}"></script>
+{% endblock javascript %}
+
+</body>
+
+</html>

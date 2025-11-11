@@ -1,0 +1,218 @@
+.sponsoring-header-box {
+    background: #15191a;
+}
+
+.sponsoring-header-box .sponsoring-logo {
+    width: 150px;
+}
+
+.sponsoring-header-box h2 {
+    font-family: "Poppins", sans-serif;
+    font-weight: bold;
+    font-size: 50px;
+}
+
+.sponsoring-header-box p#description {
+    color: #ffaa01;
+    font-weight: bold;
+}
+
+.section-holder > .card {
+    background-color: #fafafa !important;
+    border-top: 4px solid #0e9153 !important;
+    border-left: 1px solid #b0bec5 !important;
+    border-right: 1px solid #b0bec5 !important;
+    border-bottom: 1px solid #b0bec5 !important;
+}
+
+.section-icon-holder {
+    background-color: rgba(175, 253, 220, 0.71);
+}
+.section-icon-holder i {
+    color: black;
+}
+.badge-section-icon-holder {
+    background-color: rgba(229, 239, 244, 0.8);
+    cursor: pointer;
+}
+.badge-section-icon-holder i{
+    color: red;
+}
+
+.section-holder .section-header h3 {
+    color: #004d40;
+}
+
+p.section-description {
+    color: #616161;
+}
+
+.package-container {
+    border: 3px solid transparent; /* always reserve 2px */
+    border-radius: 10px; /* keep rounded corners consistent */
+    transition: border-color 0.2s ease, transform 0.2s ease;
+
+}
+
+.package-container.classic {
+    background: linear-gradient(315deg, #66d4e79e, #2a72c8e3) !important;
+}
+
+.package-container.platinium {
+    background: linear-gradient(315deg, rgba(248, 230, 46, 0.74), rgba(242, 138, 0, 0.71));
+}
+
+.package-container.premium {
+    background: linear-gradient(315deg, rgba(183, 28, 28, 0.77), rgba(229, 57, 53, 0.8));
+}
+
+.package-container.p-first {
+    background: linear-gradient(to bottom, rgba(155, 71, 167, 0.83), #d3a7df);
+
+}
+
+.package-container.p-second {
+    background: linear-gradient(90deg, rgba(247, 195, 77, 0.85), rgba(245, 166, 35, 0.83));
+
+}
+
+.package-container:hover {
+    cursor: pointer !important;
+}
+
+.package-container:has(input[type="radio"]:checked) {
+    border: 3px solid #263238;
+    /*  transform: scale(1.02); */
+}
+
+.labl {
+    cursor: pointer;
+}
+
+.labl > input { /* HIDE RADIO */
+    visibility: hidden; /* Makes input not-clickable */
+    position: absolute; /* Remove input from document flow */
+}
+
+.package-container h1, h4 {
+    color: #15191a;
+    padding: 0;
+    margin: 0;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: bold;
+}
+
+.package-container p {
+    color: white;
+    padding: 0;
+    text-align: center;
+    display: none;
+    margin-bottom: 20px;
+    font-size: smaller;
+}
+
+.package-list-items li {
+    font-size: 12px;
+}
+
+.package-list-items i {
+    color: #fff;
+    font-size: 16px;
+}
+
+.package-container a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #004d40;
+}
+
+.btn-submit-sponsoring {
+    background: #0e9153;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.btn-submit-sponsoring:hover {
+    color: white;
+    transform: scale(1);
+    background: linear-gradient(to left, rgba(14, 145, 83, 0.79), #0e9153 50%); /* Gradient similar to the image */
+
+}
+
+.btn-submit-sponsoring:disabled {
+    background: rgba(14, 145, 83, 0.7); /* Lighter background for disabled state */
+    color: #eeeeee; /* Grayed out text */
+    cursor: not-allowed;
+    transform: none;
+}
+
+.sponsor-validation input[type="checkbox"]:checked {
+    background-color: #0e9153 !important;
+    border-color: #0e9153 !important;
+    box-shadow: 0 0 0 3px rgba(14, 145, 83, 0.12) !important;
+}
+
+@media (max-width: 991.98px) {
+
+    .sponsoring-header-box .sponsoring-logo {
+        width: 100px;
+    }
+
+    .sponsoring-header-box h2 {
+        font-size: 36px;
+    }
+
+    .sponsoring-header-box p#description {
+        font-size: 12px;
+    }
+    .btn-submit-sponsoring {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+}
+
+@media (max-width: 575.98px) {
+    .sponsoring-header-box .sponsoring-logo {
+        width: 80px;
+    }
+
+    .sponsoring-header-box h2 {
+        font-size: 26px;
+    }
+
+    .sponsoring-header-box p#description {
+        font-size: 11px;
+    }
+
+     .btn-submit-sponsoring {
+        padding: 8px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .sponsoring-header-box .sponsoring-logo {
+        width: 80px;
+    }
+
+    .sponsoring-header-box h2 {
+        font-size: 26px;
+    }
+
+    .sponsoring-header-box p#description {
+        font-size: 11px;
+    }
+
+    .btn-submit-sponsoring {
+        padding: 7px;
+        font-size: 12px;
+    }
+}

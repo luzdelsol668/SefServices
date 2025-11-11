@@ -108,10 +108,12 @@ SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ['local_password',]
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'approval_prompt': 'force'}
 SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['email', 'name', 'first_name', 'last_name']
 
-AUTH_USER_MODEL = "accounts.Customer"
+AUTH_USER_MODEL = "accounts.User"
 
 AUTHENTICATION_BACKENDS = [
-    'accounts.AuthBackend.UserAuthBackend',
+    'coreservice.AuthBackend.AdminBackend',
+    'coreservice.AuthBackend.DriverBackend',
+    'coreservice.AuthBackend.CustomerBackend',
     'social_core.backends.google.GoogleOAuth',
     'social_core.backends.facebook.FacebookOAuth2',
     'social_core.backends.google.GoogleOAuth2',
@@ -145,7 +147,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'coreservice',
+    'adminpannel',
     'accounts',
     'rides',
     'payments',

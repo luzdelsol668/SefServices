@@ -41,12 +41,12 @@ urlpatterns = [
 
         ])),
 
-        path('payments', include([
+        path('payments/', include([
 
             path('', PaymentMethodListView.as_view(), name='payment_information'),
-            path('/card-authorization', CardAuthView.as_view(), name="card_authorization"),
-            path('/save-payment-method', SavingPaymentMethodView.as_view(), name="saving_payment_method"),
-            path("/card/<int:pk>/action", PaymentAction.as_view(), name="card_action"),
+            path('card-authorization', CardAuthView.as_view(), name="card_authorization"),
+            path('save-payment-method', SavingPaymentMethodView.as_view(), name="saving_payment_method"),
+            path("card/<int:pk>/action", PaymentAction.as_view(), name="card_action"),
 
         ])),
 

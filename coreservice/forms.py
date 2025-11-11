@@ -1,10 +1,11 @@
 from django import forms
+from django.conf import settings
 from django.forms import TextInput, ChoiceField, Select, DateInput, EmailInput, ModelChoiceField, \
     ModelMultipleChoiceField, CheckboxSelectMultiple, RadioSelect, Textarea, CheckboxInput, FileInput
 from django.forms.models import ModelChoiceIteratorValue
 from django_countries.widgets import CountrySelectWidget
 
-from accounts.models import Customer
+from accounts.models import Customer, User
 from coreservice.models import *
 from django.utils.translation import gettext_lazy as _
 
@@ -67,7 +68,7 @@ class LoginForm(forms.Form):
 class RegistrationForm(ChangeInputsStyle):
 
     class Meta:
-        model = Customer
+        model = User
         fields = ['last_name', 'first_name', 'email', 'phone', 'password']
 
         widgets = {
@@ -89,7 +90,7 @@ class AdminNewPasswordForm(SingleStyle):
 class CustomerProfileForm(ChangeInputsStyle):
 
     class Meta:
-        model = Customer
+        model = User
         fields = ['last_name', 'first_name', 'email', 'phone']
 
         labels = {

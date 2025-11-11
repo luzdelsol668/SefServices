@@ -1,0 +1,231 @@
+body{
+    background-color: #e8e8e8 !important;
+}
+
+.aduth-bg-cover {
+  background: linear-gradient(45deg, #a6cf29 50%, #81c62c) !important;
+}
+
+.card-header, #page-topbar, .topbar-user{
+  background-color: #009152!important;
+    border: 0;
+}
+.card-header h4{
+  color: white !important;
+}
+.ql-editor {
+    height: 100px !important;
+}
+.btn-primary{
+    background-color: #ffc200 !important;
+    color: black !important;
+}
+.btn-secondary{
+    background-color: #009152 !important;
+    color: #fff !important;
+}
+.card {
+  /*height: 75%;*/
+}
+table.details_table th {
+    padding: 4px !important;
+    font-weight: 400 !important;
+    background-color: #ffc200 !important;
+    border-bottom: 1px solid #ddd !important;
+    border-radius: 3px !important;
+    text-align: center !important;
+    color: black !important;
+}
+table.details_table {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-collapse: separate !important;
+    border-spacing: 1px !important;
+}
+table.details_table tr {
+    font-size: small !important;
+}
+table.details_table tr:hover td {
+    background-color: #d4ffe6 !important;
+    font-weight: 400;
+    font-size: 100%;
+    border: 0;
+    color: #020b12;
+}
+
+table.details_table thead > tr > th.sorting_asc:before {
+    opacity: 0 !important;
+}
+
+table.details_table th {
+    text-align: center !important;
+}
+
+table.details_table td {
+    text-align: center !important;
+}
+.input-group-text {
+    background-color: #009152 !important;
+    color: white !important;
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+select:focus,
+.uneditable-input:focus {
+    border-color: #009152 !important;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 255, 255, 0) !important;
+    outline: 0 none;
+}
+
+.form-control:focus {
+    border-color: #009152 !important;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 255, 255, 0) !important;
+}
+
+.chart-container-0{
+	position:relative;
+	height:320px;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: var(--vz-nav-pills-link-active-color);
+    background-color: #009152 !important;
+}
+.navbar-brand-box{
+    display: none !important;
+}
+
+.exhibitor_badge {
+    width: 300px;
+    height: 450px;
+    border: 2px solid #000;
+    border-radius: 10px;
+    background-image: url('https://api-media.associationfad.com/cetef/images/cetef/bg_exhibitor_badge.png');
+    background-color: white;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.badge_photo {
+    width: 105px !important;
+    height: 135px !important;
+    border-radius: 90%;
+    background: white;
+    object-fit: fill;
+    border: 3px solid black;
+}
+
+.badge_details {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.badge_id {
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #004080;
+}
+
+.badge_qr {
+    margin-top: 15px;
+}
+
+.badge_footer {
+    background: #004080;
+    color: white;
+    font-size: 14px;
+    padding: 5px;
+    position: relative;
+    bottom: 0;
+}
+fieldset#booking {
+    display: block;
+    min-inline-size: min-content;
+    margin-inline: 2px;
+    border-image: initial;
+    padding-block: 0.35em 0.625em;
+    position: relative;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-inline: 0.75em;
+    border: solid 1px #080808 !important;
+}
+
+legend#booking {
+    display: block;
+    unicode-bidi: isolate;
+    position: absolute;
+    top: -20px;
+    width: fit-content !important;
+    background-color: #fff !important;
+
+    left: 38px;
+    padding-inline: 2px;
+}
+.input-group-text.add_user {
+    background-color: #070707 !important;
+    color: white !important;
+}
+
+.form-control.iadd_user {
+    border-right: 0 !important;
+}
+
+#id_suggest {
+    border: 1px solid #999;
+    background: #faf9f9;
+    position: absolute;
+    overflow: auto;
+    width: 81%;
+}
+
+.suggestion-list {
+    list-style-type: none;
+    margin: 5px;
+    padding: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.suggestion-list li {
+    padding: 3px;
+    cursor: pointer;
+}
+
+.suggestion-list li:hover {
+    background-color: #2b323f;
+    color: white;
+}
+
+
+#id_suggest.hide_suggest {
+    display: none;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice{
+    background-color: rgba(0, 145, 82, 0.77) !important;
+    color: whitesmoke !important;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove{
+    color: #201f1f !important;
+}
+.daterangepicker td.active, .daterangepicker td.active:hover {
+    background-color: rgba(0, 145, 82, 0.77) !important;
+    border-color: transparent;
+    color: #fff;
+}

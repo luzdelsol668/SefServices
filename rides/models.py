@@ -1,11 +1,13 @@
 from decimal import Decimal
 
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
+from django_countries.fields import CountryField
 
-from accounts.models import PartnerCompany, Driver
+
 from django.utils.translation import gettext_lazy as _
-from sefservices import settings as env_variable
+from sefservices import settings as env_variable, settings
 import uuid
 
 
@@ -14,7 +16,78 @@ def car_class_upload_path(instance, filename):
     return f"carclasses/{uuid.uuid4()}.{ext}"
 
 
-# Create your models here.
+class PartnerCompany(models.Model):
+    reference = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=200)
+    country = models.CharField(max_length=2)
+    phone = models.CharField(max_length=20)
+    email = models.EmailField(unique=True, null=True, blank=True)
+    website = models.URLField(null=True)
+    payout_currency = models.CharField(max_length=3, default="EUR")
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        default_permissions = ()
+        permissions = [
+            ("can_add_company", _("Can add company")),
+            ("can_view_company", _("Can view company")),
+            ("can_update_company", _("Can update company")),
+            ("can_delete_company", _("Can delete company")),
+        ]
+
+
+class Driver(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "PENDING", "Pending"
+        ACTIVE = "ACTIVE", "Active"
+        SUSPENDED = "SUSPENDED", "Suspended"
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="driver_profile"
+    )
+    reference = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    partner = models.ForeignKey(PartnerCompany, on_delete=models.CASCADE, related_name="drivers")
+    status = models.CharField(max_length=12, choices=Status.choices, default=Status.PENDING)
+    rating = models.DecimalField(max_digits=3, decimal_places=2, default=5.00)  # 1..5
+    kyc_verified = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{_("Driver - ")}{self.reference}'
+
+    class Meta:
+        default_permissions = ()
+        permissions = [
+            ("can_add_driver", _("Can add driver")),
+            ("can_view_driver", _("Can view driver")),
+            ("can_update_driver", _("Can update driver")),
+            ("can_delete_driver", _("Can delete driver")),
+        ]
+
+
+class DriverDocument(models.Model):
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="documents")
+    type = models.CharField(max_length=50)  # license, insurance, vehicle_permit
+    file = models.FileField(upload_to="driver_docs/")
+    expires_at = models.DateField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        default_permissions = ()
+        permissions = [
+            ("can_add_driver_doc", _("Can add driver document")),
+            ("can_view_driver_doc", _("Can view driver document")),
+            ("can_update_driver_doc", _("Can update driver document")),
+            ("can_delete_driver_doc", _("Can delete driver document")),
+        ]
+
+
 class CarClass(models.Model):
     name = models.CharField(max_length=64, unique=True)
     base_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)

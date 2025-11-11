@@ -1,0 +1,335 @@
+{% extends "admin/partials/base.html" %}
+{% load static %}
+
+{% block  seo %}
+
+    <title>Tableau de Bord | Type stands - CETEF</title>
+    <meta name="description" content="Type stands"/>
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content=""/>
+    <meta property="og:title" content="Tableau de Bord | Type stands - CETEF"/>
+    <meta property="og:description" content="Type stands"/>
+    <meta property="og:image" content=""/>
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image"/>
+    <meta property="twitter:url" content=""/>
+    <meta property="twitter:title" content="Tableau de Bord | Type stands - CETEF"/>
+    <meta property="twitter:description" content="Type stands"/>
+    <meta property="twitter:image" content="{% static 'admin/images/cetef/footer_logo.png' %}"/>
+    <!-- App favicon -->
+
+{% endblock %}
+
+
+{% block extra_css %}
+    <!-- Sweet Alert css-->
+    <link href="{% static 'admin/libs/sweetalert2/dist/sweetalert2.min.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock extra_css %}
+{% block content %}
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid pt-5">
+
+
+                {% if perms.coreservice.can_view_stand_type %}
+
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            {% if edition %}
+                                <div class="card">
+                                    <div class="card-header border-0 ">
+                                        <h4 class="card-title mb-0">Edition de la catégorie
+                                            : {{ singleCategory.name }}</h4>
+                                    </div><!-- end card header -->
+
+                                    <div class="card-body">
+
+                                        <form id="new_stand_type" method="post"
+                                              class="tablelist-form"
+                                              autocomplete="off"
+                                              action="{% url 'admin:update-category' singleCategory.id %}"
+                                              enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="modal-body">
+
+                                                <div class="row gy-3">
+                                                    {% for form in categoryForm %}
+                                                        <div class="col-md-6">
+                                                            {{ form.label_tag }}
+                                                            {{ form }}
+                                                        </div>
+                                                    {% endfor %}
+
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button type="button" class="btn btn-light btn-sm"
+                                                            data-bs-dismiss="modal">
+                                                        Fermer
+                                                    </button>
+
+                                                    <button value="save" name="save" type="submit"
+                                                            class="btn btn-primary btn-sm"
+                                                            id="add-btn">
+                                                        Enregistrer
+                                                    </button>
+                                                    <button style="display: none" type="button"
+                                                            class="btn btn-primary btn-load btn-sm">
+                                                                                    <span class="d-flex align-items-center">
+                                                                                        <span class="spinner-grow flex-shrink-0"
+                                                                                              role="status">
+                                                                                            <span class="visually-hidden">En Cours...</span>
+                                                                                        </span>
+                                                                                        <span class="flex-grow-1 ms-2">
+                                                                                            En Cours...
+                                                                                        </span>
+                                                                                    </span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div><!-- end card -->
+                                </div>
+                            {% else %}
+
+                                <div class="card">
+                                    <div class="card-header border-0 ">
+                                        <h4 class="card-title mb-0">Liste de Catégories</h4>
+                                    </div><!-- end card header -->
+
+                                    <div class="card-body">
+
+                                        <div>
+                                            {% for message in messages %}
+
+                                                {% if message.extra_tags == "category_update_success" %}
+
+                                                    <div class="alert alert-success border-0 text-center" role="alert">
+                                                        {{ message }}
+                                                    </div>
+
+                                                {% elif message.extra_tags == "booth_type_delete_success" %}
+
+                                                    <div class="alert alert-danger border-0 text-center" role="alert">
+                                                        {{ message }}
+                                                    </div>
+
+                                                {% endif %}
+
+                                            {% endfor %}
+
+                                        </div>
+
+
+                                        <div id="customerList">
+                                            <div class="row mb-3 align-items-center">
+                                                <div class="col-md-4">
+                                                    <div>
+                                                                               <span class="badge bg-light text-body rounded-pill"><span
+                                                                                       style="font-size: 17px">{{ total_categories }}</span> Catégories</span>
+                                                    </div>
+                                                </div>
+
+                                                {% if perms.coreservice.can_add_stand_type %}
+                                                    <div class="col-md-8">
+                                                        <div class="float-end">
+                                                            <button type="button" class="btn btn-primary btn-sm add-btn"
+                                                                    data-bs-toggle="modal" id="create-btn"
+                                                                    data-bs-target="#showModal">
+                                                                <i class="ri-add-line align-bottom me-1"></i> Ajouter
+                                                                une Catégorie
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <table class="table table-hover table-nowrap">
+                                            <thead>
+                                            <tr align="center">
+                                                <th scope="col">Désignation</th>
+                                                <th scope="col">Prix Standard</th>
+                                                <th scope="col">Prix Kilomtré</th>
+                                                <th scope="col">Prix Horaire</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            {% for category in categories %}
+                                                <tr align="center">
+
+                                                    <td id="txt_editBooth"
+                                                        style="font-size: 16px">{{ category.name }}</td>
+                                                    <td style="font-size: 16px">{{ category.base_price }}</td>
+                                                    <td style="font-size: 16px">{{ category.per_km_rate }}</td>
+                                                    <td style="font-size: 16px">{{ category.per_hour_rate }}</td>
+
+                                                    <td>
+                                                        <a href="?edition=true&id={{ category.id }}"><i
+                                                                class="ri-pencil-line text-secondary"></i></a>
+                                                        <a class="ms-2 cursor-pointer remove-item-btn"
+                                                           data-href="{% url 'admin:delete-category' category.id %}"><i
+                                                                class="ri-delete-bin-line text-danger"></i></a>
+
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+
+
+                                            </tbody>
+                                        </table>
+
+
+                                    </div><!-- end card -->
+                                </div>
+
+                            {% endif %}
+                        </div>
+                        <!-- end col -->
+                    </div>
+
+                    <!-- end row -->
+
+                    <!-- Modal of insertion -->
+                    <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+
+                                <form id="new_stand_type" method="post"
+                                      class="tablelist-form"
+                                      autocomplete="off"
+                                      action="{% url 'admin:add-new-category' %}"
+                                      enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="modal-body">
+
+                                        <div class="row gy-3">
+                                            {% for form in categoryForm %}
+                                                <div class="col-md-6">
+                                                    {{ form.label_tag }}
+                                                    {{ form }}
+                                                </div>
+                                            {% endfor %}
+
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="hstack gap-2 justify-content-end">
+                                            <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">
+                                                Fermer
+                                            </button>
+
+                                            <button value="update" name="update" type="submit"
+                                                    class="btn btn-primary btn-sm"
+                                                    id="add-btn">
+                                                Enregistrer
+                                            </button>
+                                            <button style="display: none" type="button"
+                                                    class="btn btn-primary btn-load btn-sm">
+                                            <span class="d-flex align-items-center">
+                                                <span class="spinner-grow flex-shrink-0" role="status">
+                                                    <span class="visually-hidden">En Cours...</span>
+                                                </span>
+                                                <span class="flex-grow-1 ms-2">
+                                                    En Cours...
+                                                </span>
+                                            </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                {% else %}
+
+                    <div class="row align-items-center justify-content-center" style="height: 50vh">
+
+                        <div class="col-7 align-items-center">
+
+                            <div class="text-center">
+                                <i style="font-size: 35px" class="bx bx-error-alt text-danger"></i>
+                            </div>
+
+                            <div class="mt-3">
+                                <h5 class="text-muted text-center">Désolé, vous n'êtes pas autorisé à visualiser cette
+                                    page!</h5>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+
+        {% block footer %}
+            {% include "admin/partials/footer.html" %}
+        {% endblock footer %}
+    </div>
+    <!-- end main content-->
+{% endblock content %}
+
+{% block extra_js %}
+
+    <!-- Sweet Alerts js -->
+    <script src="{% static 'admin/libs/sweetalert2/dist/sweetalert2.min.js' %}"></script>
+
+    <script>
+        $(document).on("submit", "form#new_stand_type", function () {
+            $('#add-btn').hide()
+            $('.btn-load').show()
+
+        })
+    </script>
+
+    <script>
+        $(document).on("click", ".remove-item-btn", function () {
+
+            var del = $(this).data('href')
+            Swal.fire({
+                text: "Êtes-vous sûr de vouloir supprimer cette catégorie?",
+                showCancelButton: true,
+                confirmButtonText: 'Oui, Confirmer',
+                cancelButtonText: 'Annuler',
+                allowOutsideClick: false,
+                customClass: {
+                    confirmButton: 'btn btn-danger btn-sm me-4 waves-effect waves-light',
+                    cancelButton: 'btn btn-dark btn-sm waves-effect'
+                },
+                buttonsStyling: false
+            }).then(function (result) {
+                if (result.value) {
+                    window.location.href = del
+                }
+            });
+        });
+
+    </script>
+
+
+
+{% endblock extra_js %}

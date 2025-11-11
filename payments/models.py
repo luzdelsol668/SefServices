@@ -2,8 +2,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from accounts.models import PartnerCompany
-from rides.models import Booking
+from rides.models import Booking, PartnerCompany
 from django.utils.translation import gettext_lazy as _
 import secrets
 
